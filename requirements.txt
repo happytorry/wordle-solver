@@ -1,0 +1,2 @@
+# Wordle Solver - No external dependencies required
+# Python 3.6+ built-ins only
