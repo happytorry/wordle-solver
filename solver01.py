@@ -2,10 +2,10 @@ from collections import Counter
 
 with open("solutions.txt", "r") as f:
     words = f.read().splitlines()
-#letters = "".join(words)
-#mycount = Counter(letters).most_common(6)  
+letters = "".join(words)
+mycount = Counter(letters).most_common(6)  
 #print (mycount)
-#top_letters = [letter for letter, count in mycount]
+top_letters = [letter for letter, count in mycount]
 #print (top_letters)
 
 for n in words:
