@@ -14,6 +14,25 @@ def score_word(word):
             seenletters.append(letter)
     return score
 
+# checks a list for words that match 
+def sort_list(words, feedback, guess):
+    candidates = []
+    for word in words:
+        keep = True
+        for i in range(5):
+            if feedback[i] == "g" and guess[i] != word[i]:
+                keep = False
+            if feedback[i] == "y":
+                if guess[i] not in word or word[i] == guess[i]:
+                    keep = False
+            if feedback[i] == "x":
+                if guess[i] in word:
+                    keep = False
+        if keep == True:
+            candidates.append(word)
+    return candidates
+
+
 # creates a list of 5 Counter objects, one for each position in the word
 position_counts = [Counter() for _ in range(5)] 
 
@@ -45,24 +64,31 @@ while len (feedback_one) != 5 or any (i not in ["g", "y", "x"] for i in feedback
 #print (feedback_one)
 
 # slå av tips: settings / editor.suggest.enabled 
-candidates = []
 
 
-for word in words:
-    keep = True
-    for i in range(5):
-        if feedback_one[i] == "g" and first_guess[i] != word[i]:
-            keep = False
 
-        if feedback_one[i] == "y":
-            if first_guess[i] not in word or word[i] == first_guess[i]:
-                keep = False
+candidates_1 = sort_list(words, feedback_one, first_guess)
 
-        if feedback_one[i] == "x":
-            if first_guess[i] in word:
-                keep = False
+print (f" There are {len(candidates_1)} words left") 
+print (candidates_1)
 
-    if keep == True:
-        candidates.append(word)
- 
-print (candidates)
+###
+
+# resetter
+position_counts = [Counter() for _ in range(5)] 
+
+# teller antall forekomster av hver bokstav i hver posisjon
+for word in candidates_1:  
+    for i, letter in enumerate(word): # iterates through each letter in the word and its position
+        position_counts[i][letter] += 1
+
+
+word_scores = sorted ([(word, score_word(word)) for word in candidates_1], key=lambda x: x[1], reverse=True)
+print (word_scores[0:10])
+
+second_guess = word_scores[0][0]
+#f står for f-string (formatted string) — det lar deg sette inn variabler direkte i en tekst med {}.
+print(f"Try this as your second guess: {second_guess}")
+
+
+
