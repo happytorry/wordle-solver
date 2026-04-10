@@ -49,7 +49,7 @@ while len(candidates) != 1 and feedback != list("ggggg"):
             position_counts[i][letter] += 1
 
     word_scores = sorted ([(word, score_word(word)) for word in candidates], key=lambda x: x[1], reverse=True)
-    #print (word_scores[0:10])
+    print (word_scores[0:10])
 
     guess = word_scores[0][0]
     #f står for f-string (formatted string) — det lar deg sette inn variabler direkte i en tekst med {}.
@@ -61,8 +61,11 @@ while len(candidates) != 1 and feedback != list("ggggg"):
         print ("Invalid feedback, try again")
         feedback = list(input("Type feedback g y x and hit enter: "))
     
-
     candidates = sort_list(candidates, feedback, guess)
+
+    if len(candidates) == 0:
+        print ("The solution is not in my list of candidates")
+        break
 
     print (f" There are {len(candidates)} words left") 
     print (candidates)
