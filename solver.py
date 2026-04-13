@@ -4,6 +4,12 @@ with open("solutions.txt", "r") as f:
     # reads the file and splits it into a list of words
     candidates = f.read().splitlines() 
 
+with open("words.txt", "r") as f:
+    # reads the file and splits it into a list of words
+    words = f.read().splitlines() 
+
+words = candidates
+
 # defines a function to calculate the score of a word based on the position counts
 def score_word(word):
     score = 0
@@ -13,6 +19,8 @@ def score_word(word):
             score += position_counts[i][letter]
             seenletters.append(letter)
     return score
+
+
 
 # checks a list for words that match 
 def sort_list(words, feedback, guess):
@@ -34,25 +42,65 @@ def sort_list(words, feedback, guess):
 
 
 #def gyldig feedback
-feedback = "xxxxx"
+feedback = list ("xxxxx") 
 
 while len(candidates) != 1 and feedback != list("ggggg"):
     # creates a list of 5 Counter objects, one for each position in the word
     position_counts = [Counter() for _ in range(5)] 
     # teller antall forekomster av hver bokstav i hver posisjon
-    for word in candidates:  
-        #The enumerate() function is a built-in Python tool used to iterate 
-        # over a collection (like a list, tuple, or string) while keeping 
-        # track of the index and the element at the same time. It returns 
-        # an enumerate object that yields pairs in the form of tuples: (index, element)
-        for i, letter in enumerate(word): # iterates through each letter in the word and its position
-            position_counts[i][letter] += 1
+    
+    if len(candidates) > 150:
+        for word in candidates:  
+            #The enumerate() function is a built-in Python tool used to iterate 
+            # over a collection (like a list, tuple, or string) while keeping 
+            # track of the index and the element at the same time. It returns 
+            # an enumerate object that yields pairs in the form of tuples: (index, element)
+            for i, letter in enumerate(word): # iterates through each letter in the word and its position
+                position_counts[i][letter] += 1
 
-    word_scores = sorted ([(word, score_word(word)) for word in candidates], key=lambda x: x[1], reverse=True)
-    print (word_scores[0:10])
+        word_scores = sorted ([(word, score_word(word)) for word in candidates], key=lambda x: x[1], reverse=True)
+        print (word_scores[0:10])
+        guess = word_scores [0][0]
 
-    guess = word_scores[0][0]
-    #f står for f-string (formatted string) — det lar deg sette inn variabler direkte i en tekst med {}.
+    #if len(candidates) < 200:
+    else:
+        # for hvert ord lovlige ord
+        superword_scores = []
+        #for word in words:
+        for word in words:
+            score = 0
+            #sammenligner med hvert ord i kandidatlisten og gir det feedback-kode
+            for candidate in candidates:
+                feedback = ['x'] * 5
+                for i, letter in enumerate(word):
+                    if word[i] == candidate[i]:
+                        feedback[i] ="g"
+                    elif word[i] in candidate:
+                        feedback[i] = "y"
+                    else :
+                        feedback[i] = "x"
+                # gir ordet en score for denne komboen og legger til score for tidligere komboer
+                # checks a list for words that match 
+                score += len (sort_list(candidates,feedback,word))
+                #print(word, candidate, feedback, len(sort_list(candidates, feedback, word)))
+            #print(score)
+            # deler på antall kandidater
+            #print (len(candidates))
+            #print (score)
+            #print (len(candidates))
+            #superscore = score / len(candidates)
+            if word in candidates:
+                score -= 1
+            superword_scores.append((word, score)) 
+
+        superword_scores = sorted(superword_scores, key=lambda x: x[1] )
+        print (superword_scores[0:10])
+        print(candidates)
+        guess = superword_scores [0][0]
+
+    #superword_scores = sorted(superword_scores, key=lambda x: x[1])
+    #print (superword_scores[0:10])
+    
     print(f"Try this: {guess}")
 
     feedback = list (input ("Type feedback g y x and hit enter: "))
