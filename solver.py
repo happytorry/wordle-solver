@@ -59,7 +59,7 @@ while len(candidates) != 1 and feedback != list("ggggg"):
                 position_counts[i][letter] += 1
 
         word_scores = sorted ([(word, score_word(word)) for word in candidates], key=lambda x: x[1], reverse=True)
-        print (word_scores[0:10])
+        #print (word_scores[0:10])
         guess = word_scores [0][0]
 
     #if len(candidates) < 200:
@@ -82,25 +82,20 @@ while len(candidates) != 1 and feedback != list("ggggg"):
                 # gir ordet en score for denne komboen og legger til score for tidligere komboer
                 # checks a list for words that match 
                 score += len (sort_list(candidates,feedback,word))
-                #print(word, candidate, feedback, len(sort_list(candidates, feedback, word)))
-            #print(score)
-            # deler på antall kandidater
-            #print (len(candidates))
-            #print (score)
-            #print (len(candidates))
-            #superscore = score / len(candidates)
+
             if word in candidates:
                 score -= 1
             superword_scores.append((word, score)) 
 
         superword_scores = sorted(superword_scores, key=lambda x: x[1] )
-        print (superword_scores[0:10])
-        print(candidates)
+        #print (superword_scores[0:10])
+        
         guess = superword_scores [0][0]
 
     #superword_scores = sorted(superword_scores, key=lambda x: x[1])
     #print (superword_scores[0:10])
     
+    # legg evnt til alle forslag som har samme score!
     print(f"Try this: {guess}")
 
     feedback = list (input ("Type feedback g y x and hit enter: "))
@@ -115,8 +110,14 @@ while len(candidates) != 1 and feedback != list("ggggg"):
         print ("The solution is not in my list of candidates")
         break
 
-    print (f" There are {len(candidates)} words left") 
-    print (candidates)
+    if len(candidates) == 1:
+        print(f"The solution is: {candidates[0]}")
+        break
+
+    print (f"There are {len(candidates)} words left") 
+   
+    print(f"The remaining candidates are: {candidates}")
+   
 
 ###
 
